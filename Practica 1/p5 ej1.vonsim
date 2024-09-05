@@ -1,0 +1,52 @@
+org 1000h
+  GANASTE db "Felicidades pibe"
+  PERDISTE db "Le pifiaste mostro"
+  MENSAJE1 db "Ingresa la palabra a adivinar"
+  MENSAJE2 db "Comenza a adivinar"
+  PALABRA db ?
+  fin db ?
+  
+  org 2000h
+
+  mov bx, offset MENSAJE1
+  mov al, offset MENSAJE2-offset MENSAJE1
+  int 7
+
+  mov dh, 3
+  mov dl, 0
+  mov bx, offset PALABRA
+  dec bx
+sigo_leyendo: inc bx
+  int 6
+  inc dl
+
+  mov al, [bx]
+  cmp al, 2Eh
+  jnz sigo_leyendo
+  mov bx, offset MENSAJE2
+  mov al, offset PALABRA-offset MENSAJE2
+  int 7
+
+  mov bx, offset PALABRA
+  mov cl, [bx]
+continuo: int 6
+  mov ch, [bx]
+  cmp cl, ch
+  jnz error
+  inc bx
+  mov cl, [bx]
+  dec dl
+  cmp dl,1
+  jnz continuo
+  mov bx, offset GANASTE
+  mov al, offset PERDISTE-offset GANASTE
+  jmp final
+  
+  error: dec dh
+  cmp dh, 0
+  jns continuo
+  mov bx, offset PERDISTE
+  mov al, offset MENSAJE1-offset PERDISTE
+  final: int 7
+  int 0
+  END

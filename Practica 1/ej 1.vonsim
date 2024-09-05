@@ -1,0 +1,20 @@
+// Ej1 contar la cantidad de veces que sale la letra "a" minuscula en el MENSAJE 
+ 
+ org 1000h
+  MENSAJE db "Hola"
+  fin db ?
+  CANT db 0
+  org 2000h
+  mov bx, offset MENSAJE
+  mov al, offset fin-offset MENSAJE
+  
+cuento: mov ah, [bx]
+  cmp ah, 61h
+  jnz salto
+  inc CANT
+salto: inc bx
+  dec al 
+  jnz cuento
+  mov dl, CANT
+  int 0
+  END

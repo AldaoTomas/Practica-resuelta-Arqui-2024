@@ -1,0 +1,38 @@
+org 1000h
+  MENSAJE db "HOLa"
+  fin db ?
+
+  org 3000h
+  STRING_A_MINUS: push bx
+  push ax
+  push cx
+  mov bx, offset MENSAJE
+  mov al, offset fin-offset MENSAJE
+  int 7
+  
+  vuelvo: mov cl, [bx]
+  cmp cl, 41h
+  js salto
+  cmp cl, 5Bh
+  jns salto
+  add cl, 20h
+  mov [bx], cl
+
+  salto: inc bx
+  dec al
+  jnz vuelvo
+  
+  mov bx, offset MENSAJE
+  mov al, offset fin-offset MENSAJE
+  int 7
+  pop cx
+  pop ax
+  pop bx
+  ret
+  
+  org 2000h
+
+  call STRING_A_MINUS
+  
+  int 0
+  END

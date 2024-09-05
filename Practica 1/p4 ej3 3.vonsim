@@ -1,0 +1,27 @@
+  org 1000h
+  LEIDO db ?
+
+  org 3000h
+  A_MINUS: push bx
+  push ax
+  mov bx, offset leido
+  int 6
+  mov al, [bx]
+  cmp al, 41h
+  js salto
+  cmp al, 5Bh
+  jns salto
+  add al, 20h
+  mov [bx], al
+  mov al, 1
+  int 7
+  salto: pop ax
+  pop bx
+  ret
+  
+  org 2000h
+
+  call A_MINUS
+  
+  int 0
+  END

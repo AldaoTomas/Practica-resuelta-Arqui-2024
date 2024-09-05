@@ -1,0 +1,31 @@
+  org 1000h
+  MENSAJE db "aHola"
+  fin db ?
+  CANT db 0
+
+  org 3000h
+  CONTAR_CAR: push bx
+  push ax
+  push cx
+  mov cl, 0
+  mov bx, offset MENSAJE
+  mov al, offset fin-offset MENSAJE
+  
+cuento: mov ah, [bx]
+  cmp ah, 61h
+  jnz salto
+  inc cl
+salto: inc bx
+  dec al 
+  jnz cuento
+  pop cx
+  pop ax
+  pop bx
+  ret
+  
+  org 2000h
+
+  call CONTAR_CAR
+  
+  int 0
+  END
